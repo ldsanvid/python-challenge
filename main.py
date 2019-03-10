@@ -1,36 +1,29 @@
 import pandas as pd
 
-file = "C:\\Users\\ldsan\\Desktop\\PythonStuff\\pythonhw\\budget.csv"
+file = "Resources/election_data.csv"
 
-budget_df = pd.read_csv(file)
+election_df = pd.read_csv(file)
+election_df.head()
 
-budget_df
+nuevas_columnas = election_df["Voter ID,County,Candidate"].str.split(",", n = 2, expand=True)
+election_df["Voter ID"]= nuevas_columnas[0]
+election_df["County"]= nuevas_columnas[1]
+election_df["Candidate"]= nuevas_columnas[2]
+del election_df["Voter ID,County,Candidate"]
 
-total_months= budget_df["Date"].count()
-print(total_months)
+election_df.head()
 
-net_total= budget_df["Profit/Losses"].sum()
-print(net_total)
+casted_votes = election_df["Voter ID"].count()
+casted_votes
 
-average_change= budget_df["Profit/Losses"].mean()
-print(average_change,)
+candidates_ballot = election_df["Candidate"].value_counts()
+candidates_ballot
 
-max_profit_date= budget_df["Date"].max()
-print(max_profit_date)
+percentage_candidate = candidates_ballot * 100 / casted_votes
+percentage_candidate
 
-max_profit_ammount= budget_df["Profit/Losses"].max()
-print(max_profit_ammount)
-
-min_profit_date= budget_df["Date"].min()
-print(min_profit_date)
-
-min_profit_ammount= budget_df["Profit/Losses"].min()
-print(min_profit_ammount)
-
-print("Financial Analysis")
-print("-------------------")
-print("Total Months: " + str(total_months))
-print("Total: $" + str(net_total))
-print("Monthly Average: $" + str(average_change))
-print("Greatest Increase in Profit: " + str(max_profit_date) + "/ $" + str(max_profit_ammount))
-print("Greatest Decrease in Profit: " + str(min_profit_date) + "/ $" + str(min_profit_ammount))
+print("Election Results")
+print("----------------")
+print("Total votes: " + str(casted_votes) + " votes")
+print(candidates_ballot)
+print(percentage_candidate)
